@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="ko"
+    xmlns:th="http://www.thymeleaf.org"
+    xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <meta charset="UTF-8">
+    <title>Login</title>
+    <script>
+        let msg = '[[${msg}]]';
+        console.log("msg:",msg);
+        if(msg != '' && msg != null){
+            alert(msg);
+        }
+    </script>
+</head>
+<body>
+<!--/* <form action="/member/login" method="post"> */-->
+<!-- csrf 토큰을 포함하기 위해 url을 @{ }넘길것 -->
+<form th:action="@{/member/login}" method="post">
+    아이디:<input type="text" name="username" required><br>
+    비밀번호:<input type="text" name="password" required><br>
+    <button>로그인</button>
+</form>
+</body>
+</html>

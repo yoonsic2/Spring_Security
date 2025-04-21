@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+
+<html lang="ko"
+    xmlns:th="http://www.thymeleaf.org"
+    xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+    <head>
+        <meta charset="UTF-8">
+        <title>Title</title>
+        <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
+        <script>
+            $(function(){
+                let msg = '[[${msg}]]';
+                console.log(msg);
+                if(msg != '' && msg != null) {
+                    alert(msg);
+                }
+
+                $("#login").click(function(){
+                    location.href="member/login";
+                });
+
+                // 토큰이 포함할 경우  페이지 하단의 html에서 처리할 것.
+                $('#logout').click(function() {
+                    const form = `<form action="/member/logout" method="post"></form>`;
+                    $(form).appendTo($('body')).submit();
+                });
+
+                $("#join").click(function () {
+                    location.href="member/join";
+                });
+            });
+        </script>
+    </head>
+    <body>
+        <h1>루트 페이지입니다.</h1>
+        <div sec:authorize="isAuthenticated()">
+            <div th:text="${#authentication.principal}"></div>
+            <hr>
+            <div th:text="|${#authentication.principal.Username}님|"></div>
+            <div th:text="|${#authentication.authorities}등급|"></div>
+            <span sec:authentication="name"></span>님 환영합니다.
+        </div>
+        <ul>
+            <li>
+                <a href="/member/anyone">누구나 접근가능</a>
+            </li>
+            <li>
+                <a href="/member/anonymous">
+                    로그인 여부로 접근 제어(authentication) : 비로그인만 접근가능
+                </a>
+            </li>
+            <li>
+                <a href="/member/authenticated">
+                    로그인 여부로 접근 제어(authentication) : 로그인만 접근가능
+                </a>
+            </li>
+            <li>
+                <a href="/member/user" >
+                    권한으로 접근 제어(authorization) : ROLE_USER이상 접근가능
+                </a>
+            </li>
+            <!--  반드시 ROLE_ 붙일것. -->
+            <!--  ADMIN만 보이도록 -->
+            <li sec:authorize="hasAnyAuthority('ROLE_ADMIN')">
+                <a href="/member/admin">
+                    권한으로 접근 제어(authorization) : ROLE_ADMIN만 접근가능
+                </a>
+            </li>
+            <li><a href="/board/list">board/list</a></li>
+        </ul>
+        <hr>
+        <button sec:authorize="isAnonymous()" id="login">로그인</button>
+        <button sec:authorize="isAnonymous()" id="join">가입</button>
+        <button sec:authorize="isAuthenticated()" id="logout" class="btn btn-warning">로그아웃</button>
+        <!-- csrf 토큰을 서버로 넘기기 위해서 url을 @{} 로 설정할 것--->
+        <!--<form sec:authorize="isAuthenticated()" th:action="@{/member/logout}" method="post">-->
+        <!--    <button>로그아웃</button>-->
+        <!--</form>-->
+    </body>
+</html>

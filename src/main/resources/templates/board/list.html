@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+
+<html lang="ko"
+    xmlns:th="http://www.thymeleaf.org">
+    <head>
+        <meta charset="UTF-8">
+        <title>List</title>
+    </head>
+
+    <body>
+    <h1>List</h1>
+    <a href="/static">index</a>
+    <form th:action="@{/member/logout}" method="post">
+        <button>로그아웃</button>
+    </form>
+    <hr>
+    <th:block th:each="item:${list}">
+        <button th:onclick="clickFunction([[${item}]])" th:text="${item}"></button>
+    </th:block>
+    </body>
+
+    <script th:inline="javaScript">
+        function clickFunction(no){
+            console.log(no);
+        }
+    </script>
+</html>
